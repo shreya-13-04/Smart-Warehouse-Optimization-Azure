@@ -1,0 +1,13 @@
+flask
+flask-cors
+pandas
+gunicorn
+
+# Azure SDKs (for later Azure integration)
+azure-storage-blob
+azure-ai-textanalytics
+azure-cosmos
+azure-core
+
+# Optional (for auth later)
+msal

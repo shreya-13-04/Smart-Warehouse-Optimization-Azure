@@ -1,0 +1,19 @@
+flask
+pandas
+gunicorn
+
+# Azure Storage
+azure-storage-blob
+
+# Azure AI Language (Text Analytics)
+azure-ai-textanalytics
+azure-core
+
+# Azure Cosmos DB
+azure-cosmos
+
+# Authentication (if using Azure AD later)
+msal
+
+# CORS (recommended for frontend-backend connection)
+flask-cors
