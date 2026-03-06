@@ -1,6 +1,14 @@
 import requests
 import pandas as pd
 import pyodbc
+import os
+
+# -----------------------------
+# Environment Variables
+# -----------------------------
+SQL_PASSWORD = os.getenv("AZURE_SQL_PASSWORD")
+VISION_KEY = os.getenv("AZURE_VISION_KEY")
+VISION_ENDPOINT = os.getenv("AZURE_VISION_ENDPOINT")
 
 # -----------------------------
 # Azure SQL Connection
@@ -10,19 +18,12 @@ conn = pyodbc.connect(
     "Server=warehouse-ai-server.database.windows.net;"
     "Database=warehouse-ai-db;"
     "Uid=azureadmin;"
-    "Pwd=warehouse@1234;"
+    f"Pwd={SQL_PASSWORD};"
     "Encrypt=yes;"
 )
 
 cursor = conn.cursor()
 
-# -----------------------------
-# Azure Vision API
-
-import os
-
-subscription_key = os.getenv("AZURE_VISION_KEY")
-endpoint = os.getenv("AZURE_VISION_ENDPOINT")
 # -----------------------------
 # Dataset
 # -----------------------------
@@ -43,9 +44,7 @@ for index, row in df.iterrows():
         "Content-Type": "application/json"
     }
 
-    body = {
-        "url": image_url
-    }
+    body = {"url": image_url}
 
     response = requests.post(api_url, headers=headers, json=body)
     result = response.json()
@@ -64,9 +63,6 @@ for index, row in df.iterrows():
         tags = ",".join(tag_list)
         print("Tags:", tag_list)
 
-    # -----------------------------
-    # Insert into Azure SQL
-    # -----------------------------
     cursor.execute(
         """
         INSERT INTO vision_results (image_name, image_url, caption, tags)
